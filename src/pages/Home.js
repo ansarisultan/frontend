@@ -53,40 +53,8 @@ useEffect(() => {
   loadData();
 }, [currentUser.token]);
 
-  useEffect(() => {
-    if (socket && selectedChat) {
-      socket.emit('joinRoom', selectedChat._id);
-      
-      socket.on('receiveMessage', (message) => {
-        if (message.chat === selectedChat._id) {
-          setMessages(prev => [...prev, message]);
-        }
-      });
-    }
-  }, [socket, selectedChat]);
 
-const fetchChats = async () => {
-  try {
-    const response = await axios.get(`${API}/api/chats`, {
-      headers: { Authorization: `Bearer ${currentUser.token}` }
-    });
-    setChats(response.data);
-  } catch (error) {
-    console.error('Error fetching chats:', error);
-  }
-};
-
-
-  const fetchUsers = async () => {
-    try {
-      const response = await axios.get('http://localhost:5000/api/users', {
-        headers: { Authorization: `Bearer ${currentUser.token}` }
-      });
-      setUsers(response.data);
-    } catch (error) {
-      console.error('Error fetching users:', error);
-    }
-  };
+ 
 
 const fetchMessages = async (chatId) => {
   try {
