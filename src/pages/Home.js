@@ -11,9 +11,9 @@ import {
   IconButton,
   Typography,
   AppBar,
-  Toolbar,
-  Badge,
+  Toolbar
 } from '@mui/material';
+
 import SendIcon from '@mui/icons-material/Send';
 import SearchIcon from '@mui/icons-material/Search';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
@@ -33,10 +33,25 @@ const Home = () => {
   const [newMessage, setNewMessage] = useState('');
   const [users, setUsers] = useState([]);
 
-  useEffect(() => {
-    fetchChats();
-    fetchUsers();
-  }, []);
+useEffect(() => {
+  const loadData = async () => {
+    try {
+      const chatsRes = await axios.get(`${API}/api/chats`, {
+        headers: { Authorization: `Bearer ${currentUser.token}` }
+      });
+      setChats(chatsRes.data);
+
+      const usersRes = await axios.get(`${API}/api/users`, {
+        headers: { Authorization: `Bearer ${currentUser.token}` }
+      });
+      setUsers(usersRes.data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  loadData();
+}, [currentUser.token]);
 
   useEffect(() => {
     if (socket && selectedChat) {
